@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+
+    <!-- leaflet cdn -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+        integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
+        crossorigin="" />
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+        integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+        crossorigin=""></script>
+
+
+    <!-- tilelayer; mapbox cdn -->
+    <link href="https://api.mapbox.com/mapbox-gl-js/v2.7.0/mapbox-gl.css" rel="stylesheet">
+    <script src="https://api.mapbox.com/mapbox-gl-js/v2.7.0/mapbox-gl.js"></script>
+
+
+    <!-- tilelayer; mapquest cdn ?? -->
+    <!-- <script src="https://www.mapquestapi.com/sdk/leaflet/v2.2/mq-map.js?key=z9GrZlUS9iXlLwjzlZzL5iMcv4xAQARR"></script>
+    <script src="https://www.mapquestapi.com/sdk/leaflet/v2.2/mq-routing.js?key=z9GrZlUS9iXlLwjzlZzL5iMcv4xAQARR">
+    </script> -->
+
+    <!-- leaflet routing cdn -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.css" />
+    <script src="https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.js"></script>
+
+
+    <style>
+        #map {
+            height: 80vh;
+            width: 80vw;
+        }
+    </style>
+
+
+</head>
+
+<body>
+
+    <div id="map"></div>
+
+
+    <script>
+        const map = L.map('map').setView([33.396600, 44.356579], 13);
+
+
+        // old tilelayer; openstreetmap
+
+        // L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        //     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        // }).addTo(map);
+
+
+        //new tilelayer; mapbox
+
+        const apiKey = 'pk.eyJ1IjoiYWxmcmVkMjAxNiIsImEiOiJja2RoMHkyd2wwdnZjMnJ0MTJwbnVmeng5In0.E4QbAFjiWLY8k3AFhDtErA';
+
+
+        L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
+            maxZoom: 18,
+            id: 'mapbox/streets-v11',
+            tileSize: 512,
+            zoomOffset: -1,
+            accessToken: apiKey
+        }).addTo(map);
+
+
+
+        // L.marker([51.5, -0.09]).addTo(map)
+        //     .bindPopup('A pretty CSS3 popup.<br> Easily customizable.')
+        //     .openPopup();
+
+
+
+
+        ////          leaflet Routing machine api; plugin; 
+
+        // trying L.routing.control 
+        // var map = L.map('map');
+
+        // L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+        //     attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+        // }).addTo(map);
+
+        // L.Routing.control({
+        //     waypoints: [
+        //         L.latLng(33, 44),
+        //         L.latLng(33, 43)
+        //     ]
+        // }).addTo(map);
+
+        L.Routing.control({
+            waypoints: [
+                L.latLng(33.408102, 44.355920),
+                L.latLng(33.396600, 44.356579)
+            ],
+            // autoRoute: false
+            // plan: null,
+            // router: null,
+            // router: L.Routing.mapbox('access-token'),
+            // fitSelectedRoutes: false,
+
+
+            // createMarker: function () {
+            //     return null;
+            // },
+
+            // lineOptions: {
+            //     addWaypoints: false
+            // }
+
+
+            // addwaypoints: false,
+            // draggableWaypoints: false
+        }).addTo(map);
+
+
+
+        //trying L.routing.line; 
+        // L.Routing.line([L.latLng(33.408102, 44.355920),L.latLng(33.396600, 44.356579)])
+
+
+        // L.waypoints[
+        //     L.latLng(33.408102, 44.355920),
+        //     L.latLng(33.396600, 44.356579)
+        // ].addTo(map)
+
+        //routing ???
+
+        /* Start routing control  */
+        // function begin_routing() {
+        //     L.Routing.control({
+        //         waypoints: [
+        //             orig_loc,
+        //             dest_loc
+        //             //L.latLng(14.1688, 100.2918),
+        //             //L.latLng(13.7042, 100.6032)
+        //         ],
+        //         routeWhileDragging: true,
+        //         routeDragInterval: 500,
+        //         collapsible: true, // hide/show panel routing
+        //         reverseWaypoints: false,
+        //         showAlternatives: false,
+        //         createMarker: function (i, wp, nWps) {
+        //             switch (i) {
+        //                 case 0:
+        //                     return L.marker(wp.latLng, {
+        //                         icon: svgpin_Icon,
+        //                         draggable: true
+        //                     }).bindPopup("<b>" + "Origin" + "</b>");
+        //                 case nWps - 1:
+        //                     return L.marker(wp.latLng, {
+        //                         icon: svgpin_Icon2,
+        //                         draggable: true
+        //                     }).bindPopup("<b>" + "Destination" + "</b>");
+        //                 default:
+        //                     return L.marker(wp.latLng, {
+        //                         icon: svgpin_Icon3,
+        //                         draggable: true
+        //                     }).bindPopup("<b>" + "Waypoint" + "</b>");
+        //             }
+        //         }
+        //     }).addTo(map);
+        // }
+
+        // begin_routing();
+    </script>
+
+</body>
+
+</html>

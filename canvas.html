@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+
+    <script src='https://api.mapbox.com/mapbox-gl-js/v2.7.0/mapbox-gl.js'></script>
+    <link href='https://api.mapbox.com/mapbox-gl-js/v2.7.0/mapbox-gl.css' rel='stylesheet' />
+
+</head>
+<style>
+    body {
+        margin: 0%;
+        position: relative;
+    }
+
+    #map {
+        height: 80vh;
+        width: 80vw;
+        /* background: red; */
+    }
+
+    .canv {
+        /* height: 40vh;
+        width: 40vw; */
+        background: rgba(170, 255, 244, 0.4);
+        position: absolute;
+        top: 10vh;
+        left: 20vw;
+        pointer-events: none;
+        cursor: default;
+
+    }
+</style>
+
+<body>
+
+
+    <div id='map'></div>
+    <canvas class="canv"></canvas>
+
+
+    <script>
+        // TO MAKE THE MAP APPEAR YOU MUST
+        // ADD YOUR ACCESS TOKEN FROM
+        // https://account.mapbox.com
+        mapboxgl.accessToken = 'pk.eyJ1IjoibnVhbSIsImEiOiJjbDE2bXN1NXEwdmU0M2JzZ3hyeG51emVoIn0.h0mj6xpoN2vu-bOonKwYOw';
+        const map = new mapboxgl.Map({
+            container: 'map', // container ID
+            style: 'mapbox://styles/mapbox/streets-v11', // style URL
+            center: [-74.5, 40], // starting position [lng, lat]
+            zoom: 10 // starting zoom
+        });
+
+        // let map1 = document.querySelector("#map")
+        // map1.addEventListener("click", () => {
+        //     console.log("map")
+        // })
+        // canv.addEventListener("click", () => {
+        //     console.log("canv")
+        // })
+
+
+        let canv = document.querySelector(".canv")
+
+        canv.style.width = "40vw"
+        canv.style.height = "40vh"
+
+
+
+
+
+
+        let canvas = document.getElementById('tutorial');
+        let ctx = canvas.getContext('2d');
+    </script>
+
+
+</body>
+
+</html>

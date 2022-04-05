@@ -1,0 +1,237 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body {
+            background: green;
+        }
+    </style>
+</head>
+
+
+<body>
+
+    hello from public then html
+
+    <form action="/resol" method="post">
+        <button>submit</button>
+    </form>
+
+</body>
+
+</html> -->
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+
+    <!-- leaflet cdn -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+        integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
+        crossorigin="" />
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+        integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+        crossorigin=""></script>
+
+
+    <!-- tilelayer; mapbox cdn -->
+    <link href="https://api.mapbox.com/mapbox-gl-js/v2.7.0/mapbox-gl.css" rel="stylesheet">
+    <script src="https://api.mapbox.com/mapbox-gl-js/v2.7.0/mapbox-gl.js"></script>
+
+
+    <!-- tilelayer; mapquest cdn ?? -->
+    <!-- <script src="https://www.mapquestapi.com/sdk/leaflet/v2.2/mq-map.js?key=z9GrZlUS9iXlLwjzlZzL5iMcv4xAQARR"></script>
+    <script src="https://www.mapquestapi.com/sdk/leaflet/v2.2/mq-routing.js?key=z9GrZlUS9iXlLwjzlZzL5iMcv4xAQARR">
+    </script> -->
+
+    <!-- leaflet routing cdn -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.css" />
+    <script src="https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.js"></script>
+
+
+    <style>
+        #map {
+            height: 80vh;
+            width: 80vw;
+        }
+
+
+        /* should be used with the hide() to hide the Hide itinerary instructions minimized */
+        .leaflet-control-container .leaflet-routing-container-hide {
+            display: none;
+        }
+    </style>
+
+
+</head>
+
+<body>
+
+    <div id="map"></div>
+
+    <!-- <form action="/" method="post">
+        <label for="who">for </label>
+        <input type="text" name="who">
+        <button>submit</button>
+    </form> -->
+
+    <button>submit</button>
+
+
+
+    <script>
+        //initializing map, tile layer; 
+
+        const map = L.map('map').setView([33.396600, 44.356579], 13);
+
+
+        const apiKey = 'pk.eyJ1IjoiYWxmcmVkMjAxNiIsImEiOiJja2RoMHkyd2wwdnZjMnJ0MTJwbnVmeng5In0.E4QbAFjiWLY8k3AFhDtErA';
+
+        L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
+            maxZoom: 18,
+            id: 'mapbox/streets-v11',
+            tileSize: 512,
+            zoomOffset: -1,
+            accessToken: apiKey
+        }).addTo(map);
+
+
+        //bounds
+        let bounds = map.getBounds()
+        console.log(bounds)
+
+
+
+
+        //render paths 
+
+        let paths = []
+        let p = []
+        let mlist = []
+
+        let p1 = [
+            [33.408102, 44.355920],
+            [33.396600, 44.356579]
+        ]
+        p2 = [
+            [33.368550, 44.371130],
+            [33.378108, 44.401303]
+        ]
+        paths.push(p1, p2)
+
+
+        function clalPath(lis) {
+            lis.forEach(e => {
+                let i = L.Routing.control({
+                    // waypoints: (L.latLng(e[0]), L.latLng(e[1])),
+                    waypoints: e,
+                    fitSelectedRoutes: false,
+                    createMarker: function () {
+                        return null;
+                    },
+                }).addTo(map)
+                i.hide()
+            })
+        }
+
+        clalPath(paths)
+
+        // p1 = [L.latLng(33.408102, 44.355920), L.latLng(33.396600, 44.356579)]
+        // p2 = [L.latLng(33.368550, 44.371130), L.latLng(33.378108, 44.401303)]
+        // paths.push(p1, p2)
+        // paths.push(p2)
+
+
+
+        // adding path
+        map.on('click', function (ev) {
+            var latlng = map.mouseEventToLatLng(ev.originalEvent);
+            let i = [latlng.lat, latlng.lng]
+            // let i
+
+
+            let m = L.marker(i).addTo(map);
+            console.log(m)
+            mlist.push(m)
+            console.log(mlist)
+
+            p.push(i)
+
+            if (p.length >= 2) {
+
+                paths.push(p)
+
+                // clalPath()
+                let ii = L.Routing.control({
+                    waypoints: paths[paths.length - 1],
+                    fitSelectedRoutes: false,
+                    createMarker: function () {
+                        return null;
+                    },
+                }).addTo(map)
+                ii.hide()
+
+                // L.polyline(p).addTo(map)
+
+
+
+                p = []
+            }
+            if (mlist.length > 2) {
+                mlist.forEach(mk => map.removeLayer(mk))
+                let m = L.marker(i).addTo(map)
+                mlist = [m]
+            }
+        });
+
+
+        map.on("click", () => {
+
+        })
+
+
+        //making a post request 
+
+        let data = {
+            "one": "three"
+        }
+
+        let btn1 = document.querySelector("button")
+        btn1.onclick = () => {
+            fetch("/", {
+                method: "POST",
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(paths)
+            })
+            console.log(paths)
+        }
+
+        //get paths; data onload
+
+        // window.onload =
+        window.addEventListener("load", async () => {
+            let res = await fetch("/data", {
+                // method: "get"
+            })
+            const resolved = await res.json()
+            clalPath(resolved)
+            console.log(resolved)
+        })
+    </script>
+
+</body>
+
+</html>

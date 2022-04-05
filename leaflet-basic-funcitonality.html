@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <title>Maps Project</title>
+
+    <style>
+        #map {
+            height: 80vh;
+            width: 60vw;
+            margin: 5vh auto;
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <div id="map"></div>
+
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <!-- <script src="main.js"></script> -->
+
+    <script>
+        const apiKey = 'pk.eyJ1IjoiYWxmcmVkMjAxNiIsImEiOiJja2RoMHkyd2wwdnZjMnJ0MTJwbnVmeng5In0.E4QbAFjiWLY8k3AFhDtErA';
+
+        // const apikey =
+        // "pk.eyJ1IjoibnVhbSIsImEiOiJjbDE2bXN1NXEwdmU0M2JzZ3hyeG51emVoIn0.h0mj6xpoN2vu-bOonKwYOw"
+        //
+        // const apikey = "pk.eyJ1IjoibnVhbSIsImEiOiJjbDE2bXN1NXEwdmU0M2JzZ3hyeG51emVoIn0.h0mj6xpoN2vu-bOonKwYOw"
+
+
+        //initializing map, tile layer
+
+        const mymap = L.map('map').setView([33.401968, 44.355534], 13);
+
+        L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
+            maxZoom: 18,
+            id: 'mapbox/streets-v11',
+            tileSize: 512,
+            zoomOffset: -1,
+            accessToken: apiKey
+        }).addTo(mymap);
+
+
+        // make and add Marker
+
+        const marker = L.marker([33.401968, 44.355534]).addTo(mymap);
+
+        // Add popup message
+        let template = `
+<h3>Empire State Building</h3>
+<div style="text-align:center">
+<img width="150" height="150"src="image.jpg"/>
+</div>`
+
+        // make and add Polyline
+
+        const polygon = L.polyline([
+            [33.405011, 44.351903],
+            [33.402412, 44.352284],
+            [33.402370, 44.357165]
+        ], {
+            color: 'red',
+        }).addTo(mymap)
+        polygon.bindPopup(template);
+    </script>
+</body>
+
+</html>

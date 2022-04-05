@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <title>Maps Project</title>
+
+    <style>
+        body {
+            margin: 0%;
+            height: 100vh;
+            /* overflow: hidden; */
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        #map {
+            height: 80vh;
+            width: 60vw;
+            margin: 5vh auto;
+        }
+
+
+        #info {
+            display: table;
+            position: relative;
+            margin: 0px auto;
+            word-wrap: anywhere;
+            white-space: pre-wrap;
+            padding: 10px;
+            border: none;
+            border-radius: 3px;
+            font-size: 12px;
+            text-align: center;
+            color: #222;
+            background: #fff;
+        }
+
+        button {
+            position: absolute;
+            top: 10vh;
+            right: 10vw;
+        }
+
+
+        #muap {
+            /* position: absolute;
+            top: 0; */
+            bottom: 0;
+            width: 80%;
+            height: 80%;
+        }
+    </style>
+    <link href="https://api.mapbox.com/mapbox-gl-js/v2.7.0/mapbox-gl.css" rel="stylesheet">
+    <script src="https://api.mapbox.com/mapbox-gl-js/v2.7.0/mapbox-gl.js"></script>
+
+</head>
+
+<body>
+
+
+    <h2>the main page </h2>
+    <div id="map"></div>
+    <div class="click"></div>
+    <button>submit</button>
+
+
+    <!-- muap -->
+
+    <!-- <div id="muap"></div>
+    <pre id="info"></pre> -->
+
+
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script src="index.js"></script>
+
+    <script src="https://www.mapquestapi.com/sdk/leaflet/v2.2/mq-map.js?key=z9GrZlUS9iXlLwjzlZzL5iMcv4xAQARR"></script>
+    <script src="https://www.mapquestapi.com/sdk/leaflet/v2.2/mq-routing.js?key=z9GrZlUS9iXlLwjzlZzL5iMcv4xAQARR">
+    </script>
+
+
+    <script>
+        // mapboxgl.accessToken = 'pk.eyJ1IjoibnVhbSIsImEiOiJjbDE2bXN1NXEwdmU0M2JzZ3hyeG51emVoIn0.h0mj6xpoN2vu-bOonKwYOw';
+        // const map = new mapboxgl.Map({
+        //     container: 'muap', // container id
+        //     style: 'mapbox://styles/mapbox/streets-v11',
+        //     center: [-74.5, 40], // starting position
+        //     zoom: 9 // starting zoom
+        // });
+
+        // map.on('mousemove', (e) => {
+        //     document.getElementById('info').innerHTML =
+        //         // `e.point` is the x, y coordinates of the `mousemove` event
+        //         // relative to the top-left corner of the map.
+        //         JSON.stringify(e.point) +
+        //         '<br />' +
+        //         // `e.lngLat` is the longitude, latitude geographical position of the event.
+        //         JSON.stringify(e.lngLat.wrap());
+        // });
+    </script>
+
+    <script>
+        //for express post 
+
+        // let btn1 = document.querySelector("button")
+        // btn1.onclick = () => {
+        //     console.log("hi")
+        //     let data = {
+        //         element: "barium"
+        //     };
+
+        //     fetch("http://localhost:3000", {
+        //         method: "POST",
+        //         body: JSON.stringify(data)
+        //     }).then(res => {
+        //         console.log("Request complete! response:", res);
+        //     });
+        // }
+    </script>
+
+
+</body>
+
+</html>
