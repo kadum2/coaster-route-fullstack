@@ -92,15 +92,15 @@
         let p = []
         let mlist = []
 
-        let p1 = [
-            [33.408102, 44.355920],
-            [33.396600, 44.356579]
-        ]
-        p2 = [
-            [33.368550, 44.371130],
-            [33.378108, 44.401303]
-        ]
-        paths.push(p1, p2)
+        // let p1 = [
+        //     [33.408102, 44.355920],
+        //     [33.396600, 44.356579]
+        // ]
+        // p2 = [
+        //     [33.368550, 44.371130],
+        //     [33.378108, 44.401303]
+        // ]
+        // paths.push(p1, p2)
 
 
         function clalPath(lis) {
@@ -117,7 +117,13 @@
             })
         }
 
-        clalPath(paths)
+        // clalPath(paths)
+
+        function callPloylinePath(list) {
+            list.forEach(e => {
+                L.polyline(e).addTo(map)
+            })
+        }
 
 
         // adding path; need edit 
@@ -171,6 +177,7 @@
 
             console.log(resolved.map(e => e.path))
             clalPath(resolved.map(e => e.path))
+            callPloylinePath(resolved.map(e => e.path))
             // console.log(Object.values(resolved))
             // let arr = await Object.values(resolved).forEach(e => {
             //     console.log(e.path)
@@ -192,6 +199,10 @@
         //     "one": "three"
         // }
 
+
+        //configure it to add all the new routes; not only the last one 
+        // let paths2 = paths
+
         let btn1 = document.querySelector("button")
         btn1.onclick = () => {
             fetch("/path", {
@@ -199,9 +210,11 @@
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify(paths[paths.length - 1])
+                // body: JSON.stringify(paths[paths.length - 1])
+                body: JSON.stringify(paths)
+
             })
-            console.log(paths[paths.length - 1])
+            console.log(paths)
         }
     </script>
 

@@ -1,133 +1,168 @@
 
 
+let express = require("express")
+let app = express()
+
+//setting parsers 
+const { json } = require("body-parser")
+
+//setting mongoose 
+let mongoose = require("mongoose")
+// require("dotenv").config({path: "env"})
+// mongoose.connect(process.env.DBURL)
+
+mongoose.connect("mongodb://localhost/dbname")
+
+
+const db = mongoose.connection
+db.on("error", error=>console.error(error))
+db.once("open", ()=> console.log("connected to mongoose")) // make a call ??
+
+//schema
+
+// const User = require("./paths")
+// const path = require("path")
+const paths = require("./paths.js")
+const path = require("path")
+// const path = require("path")
+// const { create } = require("./paths")
+// const user = paths.create({}).then(console.log("saved")) //add to database and get a reference to it ??
+// console.log(user) // log the saved data
+
+
+//global middleware
+
+app.use(express.static("./public"))
+app.use(express.json())
 
 
 
-const apiKey = 'pk.eyJ1IjoiYWxmcmVkMjAxNiIsImEiOiJja2RoMHkyd2wwdnZjMnJ0MTJwbnVmeng5In0.E4QbAFjiWLY8k3AFhDtErA';
+app.get("/", (req, res)=>{
+    res.send("home page")
+})
 
-// const apikey = "pk.eyJ1IjoibnVhbSIsImEiOiJjbDE2bXN1NXEwdmU0M2JzZ3hyeG51emVoIn0.h0mj6xpoN2vu-bOonKwYOw"
-// const apikey = 'pk.eyJ1IjoibnVhbSIsImEiOiJjbDE2bXN1NXEwdmU0M2JzZ3hyeG51emVoIn0.h0mj6xpoN2vu-bOonKwYOw';
+//set data; 
+//no need 
+
+// let data = [
+//     [[ 33.408102, 44.35592 ], [ 33.3966, 44.356579 ]],
+//     [[ 33.36855, 44.37113 ], [ 33.378108, 44.401303 ]],
+//     [[ 33.405231131533526, 44.37068939208985 ],[ 33.39849816260194, 44.37875747680665 ]], 
+//     [[ 33.39147812886539, 44.375518522971426 ],[ 33.405660877793345, 44.378437562258625 ]]
+//         ]
+
+// data.forEach(e=>{
+//     paths.create({path:e})
+// })
 
 
-// const mymap = L.map('map').setView([40.770116, -73.967909], 13);
-//33.401968, 44.355534
-
-const mymap = L.map('map').setView([33.401968, 44.355534], 13);
+    // paths.deleteMany({}, ()=>console.log("removed"))
 
 
-// const mymap = L.map('map', {
-//     layer: MQ.maplayer(), 
-//     center:[33.401968, 44.355534],
-//     zoom: 13
+// // add data; confirmed paths collection; routes; each document is a route; id, startpoint; array of two numbers, end point; array of two numbers 
+// let pa={
+//     path: Array
+// }
+
+
+
+
+
+// async function addPaths (vari){
+
+
+//     paths.create(vari)
+
+
+// // let created = await data.forEach(e=>{
+// //     paths.create({startpoint: e[0], endpoint: e[1]})
+// // })
+// // console.log("created; " + created)
+// // return created
+// }
+
+
+
+// addPaths(data)
+
+    // let newP = new paths()
+    // paths.create({path: []})
+
+// data.forEach(e=>{
+//     console.log(e[0], e[1])
+//     // paths.create({"path": {startpoint: e[0], endpoint: e[1]}})
+
+//     paths.create({path: [1, 3]})
+// })
+
+
+
+// console.log()
+// paths.deleteMany({}, ()=>{console.log("deleted")})
+
+
+
+
+
+// function giveData(req, res, next){
+//     res.send(data)
+//     next()
+// }
+
+
+//routes 
+//setting the app 
+//setting paths to db; 
+
+//getting from db route
+
+app.get("/path",async (req, res)=>{
+    try{
+        let resp = await paths.find()
+        // let wresp = await paths.create({path: (await paths.find()).length+1})
+        console.log(resp)
+        res.json(resp)
+    }catch(err){
+        console.log("error"+err)
+    }
+})
+
+app.post("/path", async (req, res)=>{
+    console.log(req.body)
+    console.log(req.body.length)
+
+    if(req.body.length>1){
+        Object.values(req.body).forEach(e=>paths.create({path:e}))
+    }else{
+    paths.create({path: req.body})
+
+    }
+})
+
+
+
+// app.get("/",(req, res)=>{
+//     res.sendFile()
+// })
+// app.post("/", (req, res)=>{
+//     console.log(req.body)
+//     res.send("the coords are " + req.body)
+// })
+
+// app.get('/:id', (req, res)=>{
+//     res.send("the id number is " + req.params.id)
+// })
+
+// app.get("/data", (req, res)=>{
+//     console.log("fetched")
+//     res.json(data)
 // })
 
 
 
 
-L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
-    maxZoom: 18,
-    id: 'mapbox/streets-v11',
-    tileSize: 512,
-    zoomOffset: -1,
-    accessToken: apiKey
-}).addTo(mymap);
+app.listen(process.env.PORT || 3000, console.log("listening..."))
+// app.listen(3300, console.log("listening..."))
 
-// Adding Marker
-
-const marker = L.marker([33.401968, 44.355534]).addTo(mymap);
-
-
-
-//paths 
-
-const p1 = [
-    [33.401093, 44.347709],
-    [33.401440, 44.347773],
-]
-const p2 = [
-    [33.401440, 44.347773],
-    [33.401762, 44.345695],
-]
-
-const p3 = [
-    [33.401762, 44.345695], 
-    [33.406064, 44.358729]
-]
-
-let paths = [p1, p2, p3]
-
-// paths.forEach(e=>{
-//     L.polygon(e, {
-//         color:'red',
-//         fillColor:'blue',
-//         fillOpacity:0.2
-//     }).addTo(mymap)
-    
-// })
-
-// var dir = MQ.routing.directions();
-
-        // dir.route({
-        //     locations: [
-        //         p1,
-        //         p2
-        //     ]
-        // });
-
-
-
-let btn = document.querySelector("btn")
-
-let list = []
-
-mymap.on('click', function(e) {
-    console.log(e.latlng.lat,e.latlng.lng);
-console.log([...list])
-
-
-let i = [e.latlng.lat, e.latlng.lng]
-
-list.push(i)
-if(list.length>1){
-    // list.forEach((ii, ind)=>{
-    // L.polygon(list[ind], )
-    // })
-// L.polygon([list[0], list[1], list[2]], {
-//     color: "red"
-// }).addTo(mymap)
-
-L.polyline([...list], {
-    color: "red"
-}).addTo(mymap)
-
-}
-
-
-});
-
-
-
-// map.addEventListener('mousemove', (e) => {
-//     document.getElementById('info').innerHTML =
-//         // `e.point` is the x, y coordinates of the `mousemove` event
-//         // relative to the top-left corner of the map.
-//         JSON.stringify(e.point) +
-//         '<br />' +
-//         // `e.lngLat` is the longitude, latitude geographical position of the event.
-//         JSON.stringify(e.lngLat.wrap());
-// });
-
-
-// console.log(typeof p1)
-// console.log(p2)
-
-
-// L.polygon(p2, {
-//     color:'red',
-//     fillColor:'blue',
-//     fillOpacity:0.2
-// }).addTo(mymap)
-
-//get data; paths from database; mongodb 
 
 
