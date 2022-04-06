@@ -27,31 +27,57 @@ const path = require("path")
 // console.log(user) // log the saved data
 
 
-//set routes; 
+//global middleware
 
-let data = [
-    [[ 33.408102, 44.35592 ], [ 33.3966, 44.356579 ]],
-    [[ 33.36855, 44.37113 ], [ 33.378108, 44.401303 ]],
-    [[ 33.405231131533526, 44.37068939208985 ],[ 33.39849816260194, 44.37875747680665 ]], 
-    [[ 33.39147812886539, 44.375518522971426 ],[ 33.405660877793345, 44.378437562258625 ]]
-        ]
+app.use(express.static("public"))
+app.use(express.json())
 
 
 
-// add data; confirmed paths collection; routes; each document is a route; id, startpoint; array of two numbers, end point; array of two numbers 
-let pa={
-    path: Array
-}
+//set data; 
+//no need 
+
+// let data = [
+//     [[ 33.408102, 44.35592 ], [ 33.3966, 44.356579 ]],
+//     [[ 33.36855, 44.37113 ], [ 33.378108, 44.401303 ]],
+//     [[ 33.405231131533526, 44.37068939208985 ],[ 33.39849816260194, 44.37875747680665 ]], 
+//     [[ 33.39147812886539, 44.375518522971426 ],[ 33.405660877793345, 44.378437562258625 ]]
+//         ]
+
+// data.forEach(e=>{
+//     paths.create({path:e})
+// })
 
 
-async function addPaths (){
+    // paths.deleteMany({}, ()=>console.log("removed"))
 
-let created = await data.forEach(e=>{
-    paths.create({startpoint: e[0], endpoint: e[1]})
-})
-// console.log("created; " + created)
-return created
-}
+
+// // add data; confirmed paths collection; routes; each document is a route; id, startpoint; array of two numbers, end point; array of two numbers 
+// let pa={
+//     path: Array
+// }
+
+
+
+
+
+// async function addPaths (vari){
+
+
+//     paths.create(vari)
+
+
+// // let created = await data.forEach(e=>{
+// //     paths.create({startpoint: e[0], endpoint: e[1]})
+// // })
+// // console.log("created; " + created)
+// // return created
+// }
+
+
+
+// addPaths(data)
+
     // let newP = new paths()
     // paths.create({path: []})
 
@@ -63,36 +89,13 @@ return created
 // })
 
 
-//getting from db
 
-app.get("/",async (req, res)=>{
-
-    try{
-        let resp = await paths.find()
-        let wresp = await paths.create({path: (await paths.find()).length+1})
-        console.log(wresp)
-
-        // paths.deleteMany({}, ()=>console.log("removed"))
-
-        res.json(resp)
-    }catch(err){
-        console.log("error"+err)
-    }
-
-    // let resp = await addPaths()
-    // res.json(resp)
-})
-
-
-paths.deleteMany({}, ()=>{console.log("deleted")})
+// console.log()
+// paths.deleteMany({}, ()=>{console.log("deleted")})
 
 
 
 
-//global middleware
-
-app.use(express.static("public"))
-app.use(express.json())
 
 // function giveData(req, res, next){
 //     res.send(data)
@@ -101,6 +104,28 @@ app.use(express.json())
 
 
 //routes 
+//setting the app 
+//setting paths to db; 
+
+//getting from db route
+
+app.get("/path",async (req, res)=>{
+    try{
+        let resp = await paths.find()
+        // let wresp = await paths.create({path: (await paths.find()).length+1})
+        console.log(resp)
+        res.json(resp)
+    }catch(err){
+        console.log("error"+err)
+    }
+})
+
+app.post("/path", async (req, res)=>{
+    console.log(req.body)
+    paths.create({path: req.body})
+})
+
+
 
 // app.get("/",(req, res)=>{
 //     res.sendFile()
@@ -114,10 +139,11 @@ app.post("/", (req, res)=>{
 //     res.send("the id number is " + req.params.id)
 // })
 
-app.get("/data", (req, res)=>{
-    console.log("fetched")
-    res.json(data)
-})
+// app.get("/data", (req, res)=>{
+//     console.log("fetched")
+//     res.json(data)
+// })
+
 
 
 

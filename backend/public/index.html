@@ -119,14 +119,8 @@
 
         clalPath(paths)
 
-        // p1 = [L.latLng(33.408102, 44.355920), L.latLng(33.396600, 44.356579)]
-        // p2 = [L.latLng(33.368550, 44.371130), L.latLng(33.378108, 44.401303)]
-        // paths.push(p1, p2)
-        // paths.push(p2)
 
-
-
-        // adding path
+        // adding path; need edit 
         map.on('click', function (ev) {
             var latlng = map.mouseEventToLatLng(ev.originalEvent);
             let i = [latlng.lat, latlng.lng]
@@ -154,10 +148,6 @@
                 }).addTo(map)
                 ii.hide()
 
-                // L.polyline(p).addTo(map)
-
-
-
                 p = []
             }
             if (mlist.length > 2) {
@@ -168,40 +158,51 @@
         });
 
 
-        map.on("click", () => {
+        //get paths; data onload
 
+        // window.onload =
+        window.addEventListener("load", async () => {
+            let res = await fetch("/path", {
+                // method: "get"
+            })
+            const resolved = await res.json()
+
+            // let reresolved =
+
+            console.log(resolved.map(e => e.path))
+            clalPath(resolved.map(e => e.path))
+            // console.log(Object.values(resolved))
+            // let arr = await Object.values(resolved).forEach(e => {
+            //     console.log(e.path)
+            //     return e.path
+            // })
+
+            // console.log(arr)
+
+            // console.log(Object.values(resolved)[1].path)
+            // console.log(Object.values(resolved).forEach(() => "one"))
+
+            console.log("received data")
         })
 
 
         //making a post request 
 
-        let data = {
-            "one": "three"
-        }
+        // let data = {
+        //     "one": "three"
+        // }
 
         let btn1 = document.querySelector("button")
         btn1.onclick = () => {
-            fetch("/", {
+            fetch("/path", {
                 method: "POST",
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify(paths)
+                body: JSON.stringify(paths[paths.length - 1])
             })
-            console.log(paths)
+            console.log(paths[paths.length - 1])
         }
-
-        //get paths; data onload
-
-        // window.onload =
-        window.addEventListener("load", async () => {
-            let res = await fetch("/data", {
-                // method: "get"
-            })
-            const resolved = await res.json()
-            clalPath(resolved)
-            console.log(resolved)
-        })
     </script>
 
 </body>
