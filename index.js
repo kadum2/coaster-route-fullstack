@@ -6,6 +6,9 @@ let app = express()
 //setting parsers 
 const { json } = require("body-parser")
 
+
+
+
 //setting mongoose 
 let mongoose = require("mongoose")
 // require("dotenv").config({path: "env"})
@@ -137,6 +140,11 @@ app.post("/path", async (req, res)=>{
     paths.create({path: req.body})
 
     }
+})
+
+app.get("localhost:3000/leaflet-routing-machine-3.2.12/dist/leaflet-routing-machine.js", (req, res)=>{
+res.sendFile(path.join(__dirname, './leaflet-routing-machine-3.2.12/dist/leaflet-routing-machine.js'));
+
 })
 
 

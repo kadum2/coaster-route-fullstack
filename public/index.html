@@ -17,9 +17,11 @@
         crossorigin=""></script>
 
 
+
+
     <!-- tilelayer; mapbox cdn -->
-    <link href="https://api.mapbox.com/mapbox-gl-js/v2.7.0/mapbox-gl.css" rel="stylesheet">
-    <script src="https://api.mapbox.com/mapbox-gl-js/v2.7.0/mapbox-gl.js"></script>
+    <!-- <link href="https://api.mapbox.com/mapbox-gl-js/v2.7.0/mapbox-gl.css" rel="stylesheet">
+    <script src="https://api.mapbox.com/mapbox-gl-js/v2.7.0/mapbox-gl.js"></script> -->
 
 
     <!-- tilelayer; mapquest cdn ?? -->
@@ -28,8 +30,26 @@
     </script> -->
 
     <!-- leaflet routing cdn -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.css" />
-    <script src="https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.js"></script>
+    <!-- <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.css" />
+    <script src="https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.js"></script> -->
+
+
+    <!-- local leaflet routing machine -->
+
+    <!-- <script src="./leaflet-routing-machine-3.2.12/dist/leaflet-routing-machine.js"></script> -->
+    <!-- <script type="javascript" src="../leaflet-routing-machine-3.2.12/dist/leaflet-routing-machine.js"></script> -->
+
+    <!-- <script type="javascript" src="../leaflet-routing-machine-3.2.12/dist/leaflet-routing-machine.js"></script> -->
+    <!-- <script src="../leaflet-routing-machine-3.2.12/dist/leaflet-routing-machine.js"></script> -->
+    <!-- <link rel="stylesheet" href="./leaflet-routing-machine-3.2.12/dist/leaflet-routing-machine.css"> -->
+    <!-- <link type="css" href="../leaflet-routing-machine-3.2.12/dist/leaflet-routing-machine.css"> -->
+
+
+    <!-- local leaflet routing machine -->
+
+    <script src="./leaflet-routing-machine-3.2.12/dist/leaflet-routing-machine.js"></script>
+    <link rel="stylesheet" href="./leaflet-routing-machine-3.2.12/dist/leaflet-routing-machine.css">
+
 
 
     <style>
@@ -168,28 +188,72 @@
 
         // window.onload =
         window.addEventListener("load", async () => {
-            let res = await fetch("/path", {
-                // method: "get"
-            })
-            const resolved = await res.json()
 
-            // let reresolved =
 
-            console.log(resolved.map(e => e.path))
-            clalPath(resolved.map(e => e.path))
-            callPloylinePath(resolved.map(e => e.path))
-            // console.log(Object.values(resolved))
-            // let arr = await Object.values(resolved).forEach(e => {
-            //     console.log(e.path)
-            //     return e.path
-            // })
+            try {
+
+
+                let res = await fetch("/path")
+                const resolved = await res.json()
+
+                console.log(resolved.map(e => e.path))
+                console.log(resolved)
+
+                let nu = 0
+
+                let itn = setInterval(() => {
+
+                    let i = L.Routing.control({
+                        // waypoints: (L.latLng(e[0]), L.latLng(e[1])),
+                        waypoints: resolved.map(e => e.path)[nu],
+                        fitSelectedRoutes: false,
+                        createMarker: function () {
+                            return null;
+                        },
+                    }).addTo(map)
+                    i.hide()
+
+                    nu++
+                    let ii = L.Routing.control({
+                        // waypoints: (L.latLng(e[0]), L.latLng(e[1])),
+                        waypoints: resolved.map(e => e.path)[nu],
+                        fitSelectedRoutes: false,
+                        createMarker: function () {
+                            return null;
+                        },
+                    }).addTo(map)
+                    ii.hide()
+
+
+                    if (nu == resolved.map(e => e.path).length) {
+                        clearInterval(itn)
+                    } else {
+                        nu++
+                    }
+                }, 300);
+
+                // clearInterval(itn)
+
+                // clalPath(resolved.map(e => e.path))
+
+
+
+                callPloylinePath(resolved.map(e => e.path))
+                // console.log(Object.values(resolved))
+                // let arr = await Object.values(resolved).forEach(e => {
+                //     console.log(e.path)
+                //     return e.path
+                // })
+            } catch (err) {
+                console.log("error; " + err)
+            }
 
             // console.log(arr)
 
             // console.log(Object.values(resolved)[1].path)
             // console.log(Object.values(resolved).forEach(() => "one"))
 
-            console.log("received data")
+            // console.log("received data")
         })
 
 
